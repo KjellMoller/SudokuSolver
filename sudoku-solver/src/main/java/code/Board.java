@@ -1,6 +1,10 @@
 package code;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.util.Scanner;
 
 public class Board{
@@ -28,30 +32,21 @@ public class Board{
 	}
 	
 
-	public void loadPuzzle(String level) throws Exception
-	{
-		this.level = level;
-		String fileName = "easyPuzzle.txt";
-		if(level.contentEquals("medium")) 
-			fileName = "mediumPuzzle.txt";
-		else if(level.contentEquals("hard")) 
-			fileName = "hardPuzzle.txt";
-		else if(level.contentEquals("oni"))
-			fileName = "oni.txt";
-		System.out.println(this.level);
-		Scanner input = new Scanner (new File(fileName));
-		
-		for(int x = 0; x < 9; x++)
-			for(int y = 0 ; y < 9; y++)
-			{
-				int number = input.nextInt();
-				if(number != 0)
-					solve(x, y, number);
-			}
-						
-		input.close();
-		
-	}
+	public void loadPuzzle() throws Exception {
+        String content = new String(Files.readAllBytes(Paths.get("src/main/resources/puzzle.json")));
+        JSONObject jsonObject = new JSONObject(content);
+        JSONArray puzzleArray = jsonObject.getJSONArray("Puzzle");
+
+        for (int x = 0; x < 9; x++) {
+            JSONArray row = puzzleArray.getJSONArray(x);
+            for (int y = 0; y < 9; y++) {
+                int number = row.getInt(y);
+                if (number != 0) {
+                    solve(x, y, number);
+                }
+            }
+        }
+    }
 	
 	/*This method scans the board and returns TRUE if every cell has been solved.  Otherwise it returns FALSE
 	 * 

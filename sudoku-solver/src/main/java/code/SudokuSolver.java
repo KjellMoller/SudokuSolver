@@ -5,7 +5,7 @@ public class SudokuSolver {
 	public static void main(String[] args)throws Exception {
 		
 		Board puzzle = new Board();
-		puzzle.loadPuzzle("oni");
+		puzzle.loadPuzzle();
 		puzzle.display();
 		puzzle.guess();
 		puzzle.logicCycles();
